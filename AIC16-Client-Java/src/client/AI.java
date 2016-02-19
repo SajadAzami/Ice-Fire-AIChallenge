@@ -2,7 +2,10 @@ package client;
 
 import client.model.Node;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * AI class.
@@ -24,11 +27,12 @@ public class AI {
         int totalTurns = world.getTotalTurns();
         int turnNumber = world.getTurnNumber();
         long totalTurnTime = world.getTotalTurnTime();
-
+        ArrayList<Integer> freedomPoints = getFreedomPoints(world);
+        System.out.println(myID);
 
         for (Node node : myNodes) {
             Node[] neighbours = node.getNeighbours();
-
+            boolean isMoved = false;
             System.out.print("My Node " + node.getArmyCount() + " (index" + node.getIndex()
                     + "), Has " + getEnemiesNearbyCount(node, world)
                     + " Enemy power(" + getEnemiesNearbyPower(node, world)
@@ -36,12 +40,41 @@ public class AI {
                     + " Friend power(" + getFriendsNearbyPower(node, world) + ")");
             System.out.println("");
 
-            //Simple dummy random move
+            //Move Section
+
             if (neighbours.length > 0) {
-                // select a random neighbour
-                Node destination = neighbours[(int) (neighbours.length * Math.random())];
-                // move half of the node's army to the neighbor node
-                world.moveArmy(node, destination, node.getArmyCount() / 2);
+                //Enemies Nearby
+                if (!isMoved && getEnemiesNearbyCount(node, world) != 0) {
+
+                    isMoved = true;
+                }
+
+                //No Enemy, Move to the most freedom
+                if (!isMoved && getEnemiesNearbyCount(node, world) == 0) {
+                    System.out.println("FREEEDOooooooooooooom");
+                    int[] neighboursFreedomPoints = new int[neighbours.length];
+                    for (int i = 0; i < neighbours.length; i++) {
+                        neighboursFreedomPoints[i] = freedomPoints.get(neighbours[i].getIndex());
+                    }
+                    int biggestNum = 0;
+                    int biggestNumIndex = -2;
+                    for (int i = 0; i < neighboursFreedomPoints.length; i++) {
+                        if (neighboursFreedomPoints[i] > biggestNum) {
+                            biggestNum = neighboursFreedomPoints[i];
+                            biggestNumIndex = neighbours[i].getIndex();
+                        }
+                    }
+                    if (biggestNumIndex != -1) {
+                        world.moveArmy(node.getIndex(), biggestNumIndex, (int) (node.getArmyCount() * 0.4));
+                        isMoved = true;
+                    }
+                }
+                if (!isMoved) {
+                    Node destination = neighbours[(int) (neighbours.length * Math.random())];
+                    world.moveArmy(node, destination, node.getArmyCount() / 2);
+                    System.out.println("Randomeddddddddddddd");
+                    isMoved = true;
+                }
             }
         }
         System.out.println("#################");
@@ -198,4 +231,32 @@ public class AI {
         }
         return enemies;
     }
+
+    /**
+     * return list of freedom points
+     *
+     * @param world
+     * @return ArrayList of points
+     */
+    private ArrayList<Integer> getFreedomPoints(World world) {
+        ArrayList<Integer> points = new ArrayList<>();
+        int myId = world.getMyID();
+        int enemyId = 1 - myId;
+        Node[] allNodes = world.getMap().getNodes();
+        for (Node allNode : allNodes) {
+            Node[] temp = allNode.getNeighbours();
+            int count = 0;
+            for (Node aTemp : temp) {
+                if (aTemp.getOwner() == -1) {
+                    count++;
+                }
+            }
+            if (allNode.getOwner() == myId) {
+                count = -1;
+            }
+            points.add(count);
+        }
+        return points;
+    }
+
 }
