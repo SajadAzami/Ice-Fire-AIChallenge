@@ -29,6 +29,7 @@ public class AI {
         long totalTurnTime = world.getTotalTurnTime();
         ArrayList<Integer> freedomPoints = getFreedomPoints(world);
         System.out.println(myID);
+        ArrayList<Integer> dangerPoints = getDangerPoints(world);
 
         for (Node node : myNodes) {
             Node[] neighbours = node.getNeighbours();
@@ -41,46 +42,77 @@ public class AI {
             System.out.println("");
 
             //Move Section
-
             if (neighbours.length > 0) {
-                //Enemies Nearby
+                //1.We Have Enemies Nearby, Good, That means we have stood up for something!
+                // If myPow >= ePow/2, Attack the one with most danger point
+                // if myPow < ePow/2 && i've got a friend with more danger point around, help him half of me
+                // if myPow < ePow/2 && i've got no friend around, fill an empty with 0.2 if me
+                // if non, isMoved = true, because i want to stay here and defend my land!
                 if (!isMoved && getEnemiesNearbyCount(node, world) != 0) {
+                    ArrayList<Node> sortedEnemies = getEnemiesNearby(node, world);
+                    ArrayList<Node> nearbyEnemiesDangerPoints = new ArrayList<>();
 
-                    isMoved = true;
-                }
-
-                //No Enemy, Move to the most freedom
-                if (!isMoved && getEnemiesNearbyCount(node, world) == 0) {
-                    System.out.println("FREEEDOooooooooooooom");
-                    int[] neighboursFreedomPoints = new int[neighbours.length];
-                    for (int i = 0; i < neighbours.length; i++) {
-                        neighboursFreedomPoints[i] = freedomPoints.get(neighbours[i].getIndex());
-                    }
-                    int biggestNum = 0;
-                    int biggestNumIndex = -2;
-                    for (int i = 0; i < neighboursFreedomPoints.length; i++) {
-                        if (neighboursFreedomPoints[i] > biggestNum) {
-                            biggestNum = neighboursFreedomPoints[i];
-                            biggestNumIndex = neighbours[i].getIndex();
+                    for (Node sortedEnemy : sortedEnemies) {
+                        if (node.getArmyCount() >= getNormalizedPower(sortedEnemy, world) / 2) {
+                            world.moveArmy(node.getIndex(), sortedEnemy.getIndex(), (int) (node.getArmyCount() * 0.8));
+                            isMoved = true;
+                            break;
                         }
                     }
-                    if (biggestNumIndex != -1) {
-                        world.moveArmy(node.getIndex(), biggestNumIndex, (int) (node.getArmyCount() * 0.4));
-                        isMoved = true;
+                    if (!isMoved) {
+                        for (Node neighbour : neighbours) {
+                            if (neighbour.getOwner() == myID && dangerPoints.get(neighbour.getIndex()) >
+                                    dangerPoints.get(node.getIndex())) {
+                                world.moveArmy(node.getIndex(), neighbour.getIndex(), (int) (node.getArmyCount() * 0.3));
+                                isMoved = true;
+                                break;
+                            }
+                        }
                     }
                 }
+
+                //2.No Enemy, Move to the most freedom, No freedom? Get out of my if!
+                if (!isMoved && getEnemiesNearbyCount(node, world) == 0) {
+                    int[] neighboursFreedomPoints = new int[neighbours.length];
+                    int[] neighboursIndex = new int[neighbours.length];
+                    for (int i = 0; i < neighbours.length; i++) {
+                        neighboursFreedomPoints[i] = freedomPoints.get(neighbours[i].getIndex());
+                        neighboursIndex[i] = neighbours[i].getIndex();
+                    }
+                    //Sort the freedom points
+                    for (int j = 0; j < neighboursFreedomPoints.length - 1; j++) {
+                        for (int i = 0; i < neighboursFreedomPoints.length - 1; i++) {
+                            if (neighboursFreedomPoints[i] < neighboursFreedomPoints[i + 1]) {
+                                int temp = neighboursFreedomPoints[i];
+                                int tempIndex = neighboursIndex[i];
+
+                                neighboursIndex[i] = neighboursIndex[i + 1];
+                                neighboursIndex[i + 1] = tempIndex;
+                                neighboursFreedomPoints[i] = neighboursFreedomPoints[i + 1];
+                                neighboursFreedomPoints[i + 1] = temp;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < neighboursFreedomPoints.length; i++) {
+                        if (world.getMap().getNodes()[neighboursIndex[i]].getOwner() != myID && neighboursIndex[i] > 0) {
+                            world.moveArmy(node.getIndex(), neighboursIndex[i], (int) (node.getArmyCount() * 0.8));
+                            isMoved = true;
+                            break;
+                        }
+                    }
+                }
+
+                //3.Couldn't Do anything, fuck it! I decided to move random!
                 if (!isMoved) {
                     Node destination = neighbours[(int) (neighbours.length * Math.random())];
-                    world.moveArmy(node, destination, node.getArmyCount() / 2);
+                    world.moveArmy(node, destination, 1);
                     System.out.println("Randomeddddddddddddd");
-                    isMoved = true;
                 }
             }
         }
         System.out.println("#################");
 
     }
-
 
     /**
      * return the approximate sum of nearby enemies power
@@ -133,6 +165,47 @@ public class AI {
                 break;
         }
 
+        return normalized;
+    }
+
+
+    /**
+     * return the normalized power of enemies
+     *
+     * @param node  target node
+     * @param world
+     * @return power of enemies
+     */
+    private int getNormalizedPower(Node node, World world) {
+        int normalized = 0;
+        Node[] myNodes = world.getMyNodes();
+        int energySum = 0;
+        for (Node myNode : myNodes) {
+            energySum += myNode.getArmyCount();
+        }
+        int averageEnergy = energySum / myNodes.length;
+        switch (node.getArmyCount()) {
+            case 0:
+                normalized = 5;
+                break;
+            case 1:
+                if (averageEnergy <= 10) {
+                    normalized = averageEnergy;
+                } else {
+                    normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
+                }
+                break;
+            case 2:
+                if (averageEnergy <= 30) {
+                    normalized = averageEnergy;
+                } else {
+                    normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
+                }
+                break;
+            default:
+                normalized = 0;
+                break;
+        }
         return normalized;
     }
 
@@ -251,12 +324,32 @@ public class AI {
                     count++;
                 }
             }
-            if (allNode.getOwner() == myId) {
-                count = -1;
-            }
             points.add(count);
         }
         return points;
     }
+
+
+    /**
+     * return list of danger points
+     *
+     * @param world
+     * @return ArrayList of points
+     */
+    private ArrayList<Integer> getDangerPoints(World world) {
+        ArrayList<Integer> points = new ArrayList<>();
+        int myId = world.getMyID();
+        int enemyId = 1 - myId;
+        Node[] allNodes = world.getMap().getNodes();
+        for (Node allNode : allNodes) {
+            if (getEnemiesNearbyCount(allNode, world) == 0) {
+                points.add(0);
+            } else {
+                points.add((getEnemiesNearbyPower(allNode, world) / getEnemiesNearbyCount(allNode, world)));
+            }
+        }
+        return points;
+    }
+
 
 }

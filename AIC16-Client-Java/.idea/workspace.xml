@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5f6be4b1-8252-4b7c-b252-073c0b349874" name="Default" comment="">
+    <list default="true" id="5f6be4b1-8252-4b7c-b252-073c0b349874" name="Default" comment="Exploration toward Freedom added">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/AIC16-Client-Java/client/AI.class" afterPath="$PROJECT_DIR$/out/production/AIC16-Client-Java/client/AI.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/AI.java" afterPath="$PROJECT_DIR$/src/client/AI.java" />
     </list>
@@ -29,11 +30,11 @@
       <file leaf-file-name="AI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/client/AI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35714287">
-              <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.4">
+              <caret line="56" column="33" selection-start-line="56" selection-start-column="33" selection-end-line="56" selection-end-column="33" />
               <folding>
-                <element signature="e#6853#6854#0" expanded="true" />
-                <element signature="e#6903#6904#0" expanded="true" />
+                <element signature="e#10471#10472#0" expanded="true" />
+                <element signature="e#10521#10522#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -615,7 +616,7 @@
       <workItem from="1455783138470" duration="3288000" />
       <workItem from="1455792612588" duration="728000" />
       <workItem from="1455800830243" duration="3217000" />
-      <workItem from="1455882550189" duration="9097000" />
+      <workItem from="1455882550189" duration="13636000" />
     </task>
     <task id="LOCAL-00001" summary="Simple logging of map, friends and enemies states">
       <created>1455711801184</created>
@@ -629,15 +630,21 @@
       <option name="project" value="LOCAL" />
       <updated>1455783886093</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Exploration toward Freedom added">
+      <created>1455905407265</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1455905407265</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31549000" />
+    <option name="totallyTimeSpent" value="36088000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="-4" width="1309" height="772" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -678,11 +685,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Simple logging of map, friends and enemies states" />
     <MESSAGE value="Logging improved, now we have more info about the world" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logging improved, now we have more info about the world" />
+    <MESSAGE value="Exploration toward Freedom added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Exploration toward Freedom added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -696,8 +704,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6903#6904#0" expanded="true" />
+            <element signature="e#10471#10472#0" expanded="true" />
+            <element signature="e#10521#10522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -707,8 +715,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6903#6904#0" expanded="true" />
+            <element signature="e#10471#10472#0" expanded="true" />
+            <element signature="e#10521#10522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -718,8 +726,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6903#6904#0" expanded="true" />
+            <element signature="e#10471#10472#0" expanded="true" />
+            <element signature="e#10521#10522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -729,8 +737,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6903#6904#0" expanded="true" />
+            <element signature="e#10471#10472#0" expanded="true" />
+            <element signature="e#10521#10522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -771,11 +779,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/AI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35714287">
-          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.4">
+          <caret line="56" column="33" selection-start-line="56" selection-start-column="33" selection-end-line="56" selection-end-column="33" />
           <folding>
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6903#6904#0" expanded="true" />
+            <element signature="e#10471#10472#0" expanded="true" />
+            <element signature="e#10521#10522#0" expanded="true" />
           </folding>
         </state>
       </provider>
