@@ -53,7 +53,7 @@ public class AI {
                     ArrayList<Node> nearbyEnemiesDangerPoints = new ArrayList<>();
 
                     for (Node sortedEnemy : sortedEnemies) {
-                        if (node.getArmyCount() >= getNormalizedPower(sortedEnemy, world) / 2) {
+                        if (node.getArmyCount() >= (2 * getNormalizedPower(sortedEnemy, world)) / 3) {
                             world.moveArmy(node.getIndex(), sortedEnemy.getIndex(), (int) (node.getArmyCount() * 0.8));
                             isMoved = true;
                             break;
@@ -93,20 +93,33 @@ public class AI {
                             }
                         }
                     }
+                    boolean allFriend = true;
                     for (int i = 0; i < neighboursFreedomPoints.length; i++) {
                         if (world.getMap().getNodes()[neighboursIndex[i]].getOwner() != myID && neighboursIndex[i] > 0) {
                             world.moveArmy(node.getIndex(), neighboursIndex[i], (int) (node.getArmyCount() * 0.8));
                             isMoved = true;
+                            allFriend = false;
                             break;
                         }
+                    }
+                    if (allFriend) {
+                        int smallestIndex = 0;
+                        int biggest = 100000000;
+                        for (Node neighbour : neighbours) {
+                            if (biggest > neighbour.getArmyCount()) {
+                                biggest = neighbour.getArmyCount();
+                                smallestIndex = neighbour.getIndex();
+                            }
+                        }
+                        world.moveArmy(node.getIndex(), smallestIndex, (int) (node.getArmyCount() * 0.5));
+                        isMoved = true;
                     }
                 }
 
                 //3.Couldn't Do anything, fuck it! I decided to move random!
                 if (!isMoved) {
                     Node destination = neighbours[(int) (neighbours.length * Math.random())];
-                    world.moveArmy(node, destination, 1);
-                    System.out.println("Randomeddddddddddddd");
+                    world.moveArmy(node, destination, (int) (node.getArmyCount() * 0.8));
                 }
             }
         }
