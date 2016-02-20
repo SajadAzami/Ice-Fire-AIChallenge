@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99d74e50-3014-4358-a9da-b3207e16c1f4" name="Default" comment="Final commit for online contest #2&#10;1.force balance toward the front line needs to be implemented next&#10;2.normalization is now a method&#10;3.small fix in working with constants(numbers changed to methods)">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/AIC16-Client-Java/client/AI.class" afterPath="$PROJECT_DIR$/out/production/AIC16-Client-Java/client/AI.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+    <list default="true" id="99d74e50-3014-4358-a9da-b3207e16c1f4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/AI.java" afterPath="$PROJECT_DIR$/src/client/AI.java" />
     </list>
@@ -31,12 +29,9 @@
       <file leaf-file-name="AI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/client/AI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-19.485714">
-              <caret line="41" column="37" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="37" />
-              <folding>
-                <element signature="e#16016#16017#0" expanded="true" />
-                <element signature="e#16066#16067#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.21428572">
+              <caret line="182" column="23" selection-start-line="182" selection-start-column="23" selection-end-line="182" selection-end-column="23" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -112,8 +107,8 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -171,13 +166,13 @@
   <component name="PropertiesComponent">
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="75" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="74" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="95" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="97" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="101" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="103" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="995" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="992" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="75" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
@@ -187,6 +182,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="995" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AIC16-Client-Java" />
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -644,7 +640,8 @@
       <workItem from="1455977376066" duration="131000" />
       <workItem from="1455977515694" duration="2073000" />
       <workItem from="1455981285218" duration="3534000" />
-      <workItem from="1455985892964" duration="6390000" />
+      <workItem from="1455985892964" duration="6767000" />
+      <workItem from="1455992686898" duration="170000" />
     </task>
     <task id="LOCAL-00001" summary="Final commit for online contest&#10;1.force balance toward the front line needs to be implemented next&#10;2.front line attack algorithm needs to be improved&#10;3.and a lot more!">
       <created>1455914838691</created>
@@ -652,11 +649,17 @@
       <option name="project" value="LOCAL" />
       <updated>1455914838691</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Pre Final commit for online contest&#10;1.force balance is ok, but DFS doesn't work well&#10;2.normalization is now a method&#10;3.small fix in working with constants(numbers changed to methods)">
+      <created>1455992320397</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1455992320398</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14358000" />
+    <option name="totallyTimeSpent" value="14905000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="24" width="1309" height="744" extended-state="6" />
@@ -668,7 +671,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5026738" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985073" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3283582" sideWeight="0.4973262" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985073" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -700,7 +703,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Final commit for online contest&#10;1.force balance toward the front line needs to be implemented next&#10;2.front line attack algorithm needs to be improved&#10;3.and a lot more!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final commit for online contest&#10;1.force balance toward the front line needs to be implemented next&#10;2.front line attack algorithm needs to be improved&#10;3.and a lot more!" />
+    <MESSAGE value="Pre Final commit for online contest&#10;1.force balance is ok, but DFS doesn't work well&#10;2.normalization is now a method&#10;3.small fix in working with constants(numbers changed to methods)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pre Final commit for online contest&#10;1.force balance is ok, but DFS doesn't work well&#10;2.normalization is now a method&#10;3.small fix in working with constants(numbers changed to methods)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -717,10 +721,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/model/Graph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
           <folding>
-            <element signature="e#16016#16017#0" expanded="true" />
-            <element signature="e#16066#16067#0" expanded="true" />
+            <element signature="e#204#205#0" expanded="true" />
+            <element signature="e#238#239#0" expanded="true" />
+            <element signature="e#356#357#0" expanded="true" />
+            <element signature="e#389#390#0" expanded="true" />
+            <element signature="e#557#558#0" expanded="true" />
+            <element signature="e#592#593#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/AI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -736,10 +760,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#16016#16017#0" expanded="true" />
-            <element signature="e#16066#16067#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -755,10 +776,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#16016#16017#0" expanded="true" />
-            <element signature="e#16066#16067#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -766,10 +784,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="49" column="30" selection-start-line="49" selection-start-column="30" selection-end-line="49" selection-end-column="30" />
-          <folding>
-            <element signature="e#16016#16017#0" expanded="true" />
-            <element signature="e#16066#16067#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -820,12 +835,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/AI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.485714">
-          <caret line="41" column="37" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="37" />
-          <folding>
-            <element signature="e#16016#16017#0" expanded="true" />
-            <element signature="e#16066#16067#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.21428572">
+          <caret line="182" column="23" selection-start-line="182" selection-start-column="23" selection-end-line="182" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>

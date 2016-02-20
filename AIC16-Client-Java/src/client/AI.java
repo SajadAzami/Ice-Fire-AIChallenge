@@ -155,35 +155,35 @@ public class AI {
                         }
                     }
                     if (allFriend) {
-                        if (frontLines.size() > 0) {
-                            //Now help the nearest front line, if there is any
-                            int[] dfsResults = new int[frontLines.size()];
-                            ArrayList<ArrayList<Node>> dfsResaultsRoute = new ArrayList<>();
-                            for (int i = 0; i < frontLines.size(); i++) {
-                                //Find All possible DFS to front line
-                                ArrayList<Node> temp = findSource(node, world.getMap().getNodes()[frontLines.get(i)], world.getMap());
-                                dfsResults[i] = temp.size();
-                                dfsResaultsRoute.add(temp);
-                            }
-                            //Compare and choose the nearest front liner
-                            for (int j = 0; j < dfsResults.length - 1; j++) {
-                                for (int i = 0; i < dfsResults.length - 1; i++) {
-                                    if (dfsResults[i] >= dfsResults[i + 1]) {
-                                        int temp = dfsResults[i];
-                                        ArrayList<Node> tempRoute = dfsResaultsRoute.get(i);
-
-                                        dfsResults[i] = dfsResults[i + 1];
-                                        dfsResults[i + 1] = temp;
-
-                                        dfsResaultsRoute.set(i, dfsResaultsRoute.get(i + 1));
-                                        dfsResaultsRoute.set(i + 1, tempRoute);
-                                    }
-                                }
-                            }
-                            world.moveArmy(node.getIndex(), dfsResaultsRoute.get(0).get(1).getIndex(),
-                                    (int) (node.getArmyCount() * 0.9));
-                            isMoved = true;
-                        } else {
+//                        if (frontLines.size() > 0) {
+//                            //Now help the nearest front line, if there is any
+//                            int[] dfsResults = new int[frontLines.size()];
+//                            ArrayList<ArrayList<Node>> dfsResaultsRoute = new ArrayList<>();
+//                            for (int i = 0; i < frontLines.size(); i++) {
+//                                //Find All possible DFS to front line
+//                                ArrayList<Node> temp = findSource(node, world.getMap().getNodes()[frontLines.get(i)], world.getMap());
+//                                dfsResults[i] = temp.size();
+//                                dfsResaultsRoute.add(temp);
+//                            }
+//                            //Compare and choose the nearest front liner
+//                            for (int j = 0; j < dfsResults.length - 1; j++) {
+//                                for (int i = 0; i < dfsResults.length - 1; i++) {
+//                                    if (dfsResults[i] >= dfsResults[i + 1]) {
+//                                        int temp = dfsResults[i];
+//                                        ArrayList<Node> tempRoute = dfsResaultsRoute.get(i);
+//
+//                                        dfsResults[i] = dfsResults[i + 1];
+//                                        dfsResults[i + 1] = temp;
+//
+//                                        dfsResaultsRoute.set(i, dfsResaultsRoute.get(i + 1));
+//                                        dfsResaultsRoute.set(i + 1, tempRoute);
+//                                    }
+//                                }
+//                            }
+//                            world.moveArmy(node.getIndex(), dfsResaultsRoute.get(0).get(1).getIndex(),
+//                                    (int) (node.getArmyCount() * 0.9));
+//                            isMoved = true;
+//                        } else {
                             int smallestIndex = 0;
                             int biggest = 100000000;
                             for (Node neighbour : neighbours) {
@@ -194,7 +194,7 @@ public class AI {
                             }
                             world.moveArmy(node.getIndex(), smallestIndex, (int) (node.getArmyCount() * 0.5));
                             isMoved = true;
-                        }
+//                        }
                     }
                 }
 
