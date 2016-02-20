@@ -1,11 +1,9 @@
 package client;
 
+import client.model.Graph;
 import client.model.Node;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * AI class.
@@ -19,6 +17,10 @@ import java.util.HashMap;
  */
 public class AI {
 
+    private boolean isFound;
+    private List<Integer> frontEnd = new ArrayList<>();
+    private HashMap<Integer, Integer> parents = new HashMap<>();
+
     public void doTurn(World world) {
 
         Node[] myNodes = world.getMyNodes();
@@ -28,18 +30,32 @@ public class AI {
         int turnNumber = world.getTurnNumber();
         long totalTurnTime = world.getTotalTurnTime();
         ArrayList<Integer> freedomPoints = getFreedomPoints(world);
-        System.out.println(myID);
         ArrayList<Integer> dangerPoints = getDangerPoints(world);
+        ArrayList<Integer> frontLines = getFrontLines(world);
 
+
+        ArrayList<Node> kos = new ArrayList<>();
+        kos = findSource(world.getMap().getNode(0), world.getMap().getNode(10), world.getMap());
+        for (int i = 0; i < kos.size(); i++) {
+            System.out.print(kos.get(i).getIndex() + ",");
+        }
+        System.out.println("---------");
+        for (int i = 0; i < frontLines.size(); i++) {
+            System.out.println(world.getMap().getNodes()[frontLines.get(i)].getArmyCount());
+        }
         for (Node node : myNodes) {
             Node[] neighbours = node.getNeighbours();
             boolean isMoved = false;
-            System.out.print("My Node " + node.getArmyCount() + " (index" + node.getIndex()
-                    + "), Has " + getEnemiesNearbyCount(node, world)
-                    + " Enemy power(" + getEnemiesNearbyPower(node, world)
-                    + "), Has " + getFriendsNearbyCount(node, world)
-                    + " Friend power(" + getFriendsNearbyPower(node, world) + ")");
-            System.out.println("");
+
+            //Logs
+            /**
+             System.out.print("My Node " + node.getArmyCount() + " (index" + node.getIndex()
+             + "), Has " + getEnemiesNearbyCount(node, world)
+             + " Enemy power(" + getEnemiesNearbyPower(node, world)
+             + "), Has " + getFriendsNearbyCount(node, world)
+             + " Friend power(" + getFriendsNearbyPower(node, world) + ")");
+             System.out.println("");
+             */
 
             //Move Section
             if (neighbours.length > 0) {
@@ -50,13 +66,49 @@ public class AI {
                 // if non, isMoved = true, because i want to stay here and defend my land!
                 if (!isMoved && getEnemiesNearbyCount(node, world) != 0) {
                     ArrayList<Node> sortedEnemies = getEnemiesNearby(node, world);
-                    ArrayList<Node> nearbyEnemiesDangerPoints = new ArrayList<>();
+                    ArrayList<Node> sameSizeEnemies = new ArrayList<>();
+                    Node keyEnemy = sortedEnemies.get(0);//Key enemy to find the big same size enemies
 
+                    //Find biggest enemy that we can attack and assign it as key
                     for (Node sortedEnemy : sortedEnemies) {
                         if (node.getArmyCount() >= (2 * getNormalizedPower(sortedEnemy, world)) / 3) {
-                            world.moveArmy(node.getIndex(), sortedEnemy.getIndex(), (int) (node.getArmyCount() * 0.8));
-                            isMoved = true;
+                            keyEnemy = sortedEnemy;
                             break;
+                        }
+                    }
+
+                    //If we have big and same size enemies, add it to sameSizeEnemies
+                    for (int i = 1; i < sortedEnemies.size(); i++) {
+                        if (getNormalizedPower(sortedEnemies.get(i), world) == getNormalizedPower(keyEnemy, world)) {
+                            sameSizeEnemies.add(sortedEnemies.get(i));
+                        }
+                    }
+
+                    //Sort same size enemies by danger point in ascending order
+                    for (int j = 0; j < sameSizeEnemies.size() - 1; j++) {
+                        for (int i = 0; i < sameSizeEnemies.size() - 1; i++) {
+                            if (dangerPoints.get(sameSizeEnemies.get(i).getIndex())
+                                    >= dangerPoints.get(sameSizeEnemies.get(i + 1).getIndex())) {
+                                Node temp = sameSizeEnemies.get(i);
+                                sameSizeEnemies.set(i, sameSizeEnemies.get(i + 1));
+                                sameSizeEnemies.set(i + 1, temp);
+                            }
+                        }
+                    }
+
+                    //If there are same sized enemies, attack the one with the least support
+                    if (sameSizeEnemies.size() > 0 && node.getArmyCount() >= (2 * getNormalizedPower(sortedEnemies.get(0), world)) / 3) {
+                        world.moveArmy(node.getIndex(), sameSizeEnemies.get(0).getIndex(), (int) (node.getArmyCount() * 0.8));
+                        isMoved = true;
+                    }
+
+                    if (!isMoved) {
+                        for (Node sortedEnemy : sortedEnemies) {
+                            if (node.getArmyCount() >= (2 * getNormalizedPower(sortedEnemy, world)) / 3) {
+                                world.moveArmy(node.getIndex(), sortedEnemy.getIndex(), (int) (node.getArmyCount() * 0.8));
+                                isMoved = true;
+                                break;
+                            }
                         }
                     }
                     if (!isMoved) {
@@ -103,16 +155,46 @@ public class AI {
                         }
                     }
                     if (allFriend) {
-                        int smallestIndex = 0;
-                        int biggest = 100000000;
-                        for (Node neighbour : neighbours) {
-                            if (biggest > neighbour.getArmyCount()) {
-                                biggest = neighbour.getArmyCount();
-                                smallestIndex = neighbour.getIndex();
+                        if (frontLines.size() > 0) {
+                            //Now help the nearest front line, if there is any
+                            int[] dfsResults = new int[frontLines.size()];
+                            ArrayList<ArrayList<Node>> dfsResaultsRoute = new ArrayList<>();
+                            for (int i = 0; i < frontLines.size(); i++) {
+                                //Find All possible DFS to front line
+                                ArrayList<Node> temp = findSource(node, world.getMap().getNodes()[frontLines.get(i)], world.getMap());
+                                dfsResults[i] = temp.size();
+                                dfsResaultsRoute.add(temp);
                             }
+                            //Compare and choose the nearest front liner
+                            for (int j = 0; j < dfsResults.length - 1; j++) {
+                                for (int i = 0; i < dfsResults.length - 1; i++) {
+                                    if (dfsResults[i] >= dfsResults[i + 1]) {
+                                        int temp = dfsResults[i];
+                                        ArrayList<Node> tempRoute = dfsResaultsRoute.get(i);
+
+                                        dfsResults[i] = dfsResults[i + 1];
+                                        dfsResults[i + 1] = temp;
+
+                                        dfsResaultsRoute.set(i, dfsResaultsRoute.get(i + 1));
+                                        dfsResaultsRoute.set(i + 1, tempRoute);
+                                    }
+                                }
+                            }
+                            world.moveArmy(node.getIndex(), dfsResaultsRoute.get(0).get(1).getIndex(),
+                                    (int) (node.getArmyCount() * 0.9));
+                            isMoved = true;
+                        } else {
+                            int smallestIndex = 0;
+                            int biggest = 100000000;
+                            for (Node neighbour : neighbours) {
+                                if (biggest > neighbour.getArmyCount()) {
+                                    biggest = neighbour.getArmyCount();
+                                    smallestIndex = neighbour.getIndex();
+                                }
+                            }
+                            world.moveArmy(node.getIndex(), smallestIndex, (int) (node.getArmyCount() * 0.5));
+                            isMoved = true;
                         }
-                        world.moveArmy(node.getIndex(), smallestIndex, (int) (node.getArmyCount() * 0.5));
-                        isMoved = true;
                     }
                 }
 
@@ -132,7 +214,7 @@ public class AI {
      *
      * @param node  target node
      * @param world
-     * @return 0 = weak, 1 medium, 2 strong
+     * @return normalized average power of surrounding enemies
      */
     private int getEnemiesNearbyPower(Node node, World world) {
         Node[] neighbours = node.getNeighbours();
@@ -160,17 +242,17 @@ public class AI {
                 normalized = 0;
                 break;
             case 0:
-                normalized = 5;
+                normalized = world.getLowArmyBound() / 2;
                 break;
             case 1:
-                if (averageEnergy <= 10) {
+                if (averageEnergy <= (world.getMediumArmyBound() + world.getLowArmyBound()) / 2) {
                     normalized = averageEnergy;
                 } else {
                     normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
                 }
                 break;
             case 2:
-                if (averageEnergy <= 30) {
+                if (averageEnergy <= world.getMediumArmyBound()) {
                     normalized = averageEnergy;
                 } else {
                     normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
@@ -198,25 +280,25 @@ public class AI {
         }
         int averageEnergy = energySum / myNodes.length;
         switch (node.getArmyCount()) {
+            case -1:
+                normalized = 0;
+                break;
             case 0:
-                normalized = 5;
+                normalized = world.getLowArmyBound() / 2;
                 break;
             case 1:
-                if (averageEnergy <= 10) {
+                if (averageEnergy <= (world.getMediumArmyBound() + world.getLowArmyBound()) / 2) {
                     normalized = averageEnergy;
                 } else {
                     normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
                 }
                 break;
             case 2:
-                if (averageEnergy <= 30) {
+                if (averageEnergy <= world.getMediumArmyBound()) {
                     normalized = averageEnergy;
                 } else {
                     normalized = averageEnergy * (world.getOpponentNodes().length / myNodes.length);
                 }
-                break;
-            default:
-                normalized = 0;
                 break;
         }
         return normalized;
@@ -365,4 +447,79 @@ public class AI {
     }
 
 
+    /**
+     * Created by Sina Baharlouie
+     * return list of nodes to reach a point
+     *
+     * @param map
+     * @return ArrayList of node
+     */
+    private ArrayList<Node> findSource(Node src, Node dest, Graph map) {
+
+        frontEnd.clear();
+        parents.clear();
+        isFound = false;
+        frontEnd.add(src.getIndex());
+        DFS(src, dest.getIndex());
+
+        if (!isFound)
+            return null;
+
+        ArrayList<Node> path = new ArrayList<>();
+        path.add(dest);
+        int current = dest.getIndex();
+        while (current != src.getIndex()) {
+            current = parents.get(current);
+            path.add(map.getNode(current));
+        }
+        Collections.reverse(path);
+        return path;
+
+    }
+
+
+    /**
+     * Created by Sina Baharlouie
+     * DFS function
+     */
+    private void DFS(Node current, int goal) {
+        if (current.getIndex() == goal)
+            isFound = true;
+        if (isFound)
+            return;
+
+        Node[] neighbours = current.getNeighbours();
+        for (Node neighbour : neighbours) {
+            if (frontEnd.contains(neighbour.getIndex()))
+                continue;
+            else {
+                parents.put(neighbour.getIndex(), current.getIndex());
+                frontEnd.add(neighbour.getIndex());
+                DFS(neighbour, goal);
+            }
+        }
+    }
+
+    /**
+     * Created by Sajad Azami
+     * return index list of nodes in front line
+     *
+     * @return ArrayList of front line nodes
+     */
+    public ArrayList<Integer> getFrontLines(World world) {
+        ArrayList<Integer> frontLines = new ArrayList<>();
+        Node[] myNodes = world.getMyNodes();
+        int myId = world.getMyID();
+        int enemyId = 1 - myId;
+        for (Node myNode : myNodes) {
+            Node[] neighbours = myNode.getNeighbours();
+            for (Node neighbour : neighbours) {
+                if (neighbour.getOwner() == enemyId || neighbour.getOwner() == -1) {
+                    frontLines.add(myNode.getIndex());
+                    break;
+                }
+            }
+        }
+        return frontLines;
+    }
 }
