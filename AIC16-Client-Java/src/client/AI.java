@@ -33,16 +33,6 @@ public class AI {
         ArrayList<Integer> dangerPoints = getDangerPoints(world);
         ArrayList<Integer> frontLines = getFrontLines(world);
 
-
-        ArrayList<Node> kos = new ArrayList<>();
-        kos = findSource(world.getMap().getNode(0), world.getMap().getNode(10), world.getMap());
-        for (int i = 0; i < kos.size(); i++) {
-            System.out.print(kos.get(i).getIndex() + ",");
-        }
-        System.out.println("---------");
-        for (int i = 0; i < frontLines.size(); i++) {
-            System.out.println(world.getMap().getNodes()[frontLines.get(i)].getArmyCount());
-        }
         for (Node node : myNodes) {
             Node[] neighbours = node.getNeighbours();
             boolean isMoved = false;
@@ -155,35 +145,35 @@ public class AI {
                         }
                     }
                     if (allFriend) {
-//                        if (frontLines.size() > 0) {
-//                            //Now help the nearest front line, if there is any
-//                            int[] dfsResults = new int[frontLines.size()];
-//                            ArrayList<ArrayList<Node>> dfsResaultsRoute = new ArrayList<>();
-//                            for (int i = 0; i < frontLines.size(); i++) {
-//                                //Find All possible DFS to front line
-//                                ArrayList<Node> temp = findSource(node, world.getMap().getNodes()[frontLines.get(i)], world.getMap());
-//                                dfsResults[i] = temp.size();
-//                                dfsResaultsRoute.add(temp);
-//                            }
-//                            //Compare and choose the nearest front liner
-//                            for (int j = 0; j < dfsResults.length - 1; j++) {
-//                                for (int i = 0; i < dfsResults.length - 1; i++) {
-//                                    if (dfsResults[i] >= dfsResults[i + 1]) {
-//                                        int temp = dfsResults[i];
-//                                        ArrayList<Node> tempRoute = dfsResaultsRoute.get(i);
-//
-//                                        dfsResults[i] = dfsResults[i + 1];
-//                                        dfsResults[i + 1] = temp;
-//
-//                                        dfsResaultsRoute.set(i, dfsResaultsRoute.get(i + 1));
-//                                        dfsResaultsRoute.set(i + 1, tempRoute);
-//                                    }
-//                                }
-//                            }
-//                            world.moveArmy(node.getIndex(), dfsResaultsRoute.get(0).get(1).getIndex(),
-//                                    (int) (node.getArmyCount() * 0.9));
-//                            isMoved = true;
-//                        } else {
+                        if (frontLines.size() > 0) {
+                            //Now help the nearest front line, if there is any
+                            int[] dfsResults = new int[frontLines.size()];
+                            ArrayList<ArrayList<Node>> dfsResaultsRoute = new ArrayList<>();
+                            for (int i = 0; i < frontLines.size(); i++) {
+                                //Find All possible DFS to front line
+                                ArrayList<Node> temp = findSrc(node, world.getMap().getNodes()[frontLines.get(i)], world.getMap());
+                                dfsResults[i] = temp.size();
+                                dfsResaultsRoute.add(temp);
+                            }
+                            //Compare and choose the nearest front liner
+                            for (int j = 0; j < dfsResults.length - 1; j++) {
+                                for (int i = 0; i < dfsResults.length - 1; i++) {
+                                    if (dfsResults[i] >= dfsResults[i + 1]) {
+                                        int temp = dfsResults[i];
+                                        ArrayList<Node> tempRoute = dfsResaultsRoute.get(i);
+
+                                        dfsResults[i] = dfsResults[i + 1];
+                                        dfsResults[i + 1] = temp;
+
+                                        dfsResaultsRoute.set(i, dfsResaultsRoute.get(i + 1));
+                                        dfsResaultsRoute.set(i + 1, tempRoute);
+                                    }
+                                }
+                            }
+                            world.moveArmy(node.getIndex(), dfsResaultsRoute.get(0).get(1).getIndex(),
+                                    (int) (node.getArmyCount() * 0.9));
+                            isMoved = true;
+                        } else {
                             int smallestIndex = 0;
                             int biggest = 100000000;
                             for (Node neighbour : neighbours) {
@@ -194,7 +184,7 @@ public class AI {
                             }
                             world.moveArmy(node.getIndex(), smallestIndex, (int) (node.getArmyCount() * 0.5));
                             isMoved = true;
-//                        }
+                        }
                     }
                 }
 
@@ -446,60 +436,6 @@ public class AI {
         return points;
     }
 
-
-    /**
-     * Created by Sina Baharlouie
-     * return list of nodes to reach a point
-     *
-     * @param map
-     * @return ArrayList of node
-     */
-    private ArrayList<Node> findSource(Node src, Node dest, Graph map) {
-
-        frontEnd.clear();
-        parents.clear();
-        isFound = false;
-        frontEnd.add(src.getIndex());
-        DFS(src, dest.getIndex());
-
-        if (!isFound)
-            return null;
-
-        ArrayList<Node> path = new ArrayList<>();
-        path.add(dest);
-        int current = dest.getIndex();
-        while (current != src.getIndex()) {
-            current = parents.get(current);
-            path.add(map.getNode(current));
-        }
-        Collections.reverse(path);
-        return path;
-
-    }
-
-
-    /**
-     * Created by Sina Baharlouie
-     * DFS function
-     */
-    private void DFS(Node current, int goal) {
-        if (current.getIndex() == goal)
-            isFound = true;
-        if (isFound)
-            return;
-
-        Node[] neighbours = current.getNeighbours();
-        for (Node neighbour : neighbours) {
-            if (frontEnd.contains(neighbour.getIndex()))
-                continue;
-            else {
-                parents.put(neighbour.getIndex(), current.getIndex());
-                frontEnd.add(neighbour.getIndex());
-                DFS(neighbour, goal);
-            }
-        }
-    }
-
     /**
      * Created by Sajad Azami
      * return index list of nodes in front line
@@ -521,5 +457,62 @@ public class AI {
             }
         }
         return frontLines;
+    }
+
+
+    /**
+     * Created by Sina Baharlouie
+     * return list of nodes to reach a point
+     *
+     * @param map
+     * @return ArrayList of node
+     */
+    private ArrayList<Node> findSrc(Node src, Node dest, Graph map) {
+
+        frontEnd.clear();
+        parents.clear();
+        isFound = false;
+        frontEnd.add(src.getIndex());
+
+        ArrayList<Integer> Q = new ArrayList<>();
+        int head = 0;
+        int tail = 0;
+
+        Q.add(src.getIndex());
+        tail++;
+        int current;
+        while (tail != head) {
+            current = Q.get(head);
+            head++;
+            if (current == dest.getIndex()) {
+                isFound = true;
+                break;
+            }
+
+            Node[] neighbours = map.getNode(current).getNeighbours();
+            for (Node neighbour : neighbours) {
+                if (frontEnd.contains(neighbour.getIndex()))
+                    continue;
+                else {
+                    parents.put(neighbour.getIndex(), current);
+                    frontEnd.add(neighbour.getIndex());
+                    Q.add(neighbour.getIndex());
+                    tail++;
+                }
+            }
+        }
+        if (!isFound)
+            return null;
+
+        ArrayList<Node> path = new ArrayList<>();
+        path.add(dest);
+        int cur = dest.getIndex();
+        while (cur != src.getIndex()) {
+            cur = parents.get(cur);
+            path.add(map.getNode(cur));
+        }
+        Collections.reverse(path);
+        return path;
+
     }
 }
